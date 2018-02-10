@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Час створення: Січ 30 2018 р., 21:14
+-- Час створення: Лют 10 2018 р., 13:15
 -- Версія сервера: 5.7.16-log
 -- Версія PHP: 5.6.31
 
@@ -19,10 +19,11 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База даних: `pharmacy_episode3`
+-- База даних: `pharmacy_db`
 --
-CREATE DATABASE IF NOT EXISTS `pharmacy_episode3` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `pharmacy_episode3`;
+DROP DATABASE IF EXISTS `pharmacy_db`;
+CREATE DATABASE IF NOT EXISTS `pharmacy_db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `pharmacy_db`;
 
 -- --------------------------------------------------------
 
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `balance` (
 
 --
 -- Структура таблиці `cash_flow` - відповідає таблиці 'Рух коштів' в ER-моделі
+-- purpose_of_cash - витратили на доставку або отримали за покупку
 --
 
 DROP TABLE IF EXISTS `cash_flow`;
@@ -106,7 +108,17 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `speciality` varchar(50) NOT NULL,
   `years_of_practice` int(11) NOT NULL,
   PRIMARY KEY (`id_doctor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `doctor`
+--
+
+INSERT INTO `doctor` (`id_doctor`, `surname`, `name`, `speciality`, `years_of_practice`) VALUES
+(2, 'М\'ясоєдов', 'Андрій', 'Хірург', 3),
+(3, 'Глазнюк', 'Сергій', 'Офтальмолог', 7),
+(4, 'Зубнюк', 'Дарина', 'Стоматолог', 18),
+(5, 'Селівестрова', 'Катерина', 'Терапевт', 4);
 
 -- --------------------------------------------------------
 
@@ -122,7 +134,26 @@ CREATE TABLE IF NOT EXISTS `medicine` (
   `box_price` decimal(13,2) NOT NULL,
   `quantity_per_box` int(11) NOT NULL,
   PRIMARY KEY (`id_medicine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `medicine`
+--
+
+INSERT INTO `medicine` (`id_medicine`, `title`, `producer`, `box_price`, `quantity_per_box`) VALUES
+(2, 'Travomel', 'Znahar', '100.00', 25),
+(3, 'Notta', 'Znahar', '100.00', 30),
+(4, 'Mezym', 'Znahar', '100.00', 30),
+(5, 'Hilac', 'Znahar', '200.00', 10),
+(6, 'Penicillin VK', 'AstraZeneca', '500.00', 24),
+(7, 'Diazepam', 'Novartis', '100.00', 24),
+(8, 'Metformin HCl', 'Merck', '250.00', 100),
+(9, 'Digoxin', 'GlaxoSmithKline', '375.00', 24),
+(10, 'Lovaza', 'Pfizer', '750.00', 24),
+(11, 'Lorazepam', 'Sanofi', '750.00', 100),
+(12, 'Ocuvite Forte', 'JELFA', '220.00', 20),
+(13, 'Lorazepam', 'AstraZeneca', '375.00', 24),
+(14, 'Penicillin VK', 'Novartis', '500.00', 30);
 
 -- --------------------------------------------------------
 
@@ -133,13 +164,26 @@ CREATE TABLE IF NOT EXISTS `medicine` (
 DROP TABLE IF EXISTS `patient`;
 CREATE TABLE IF NOT EXISTS `patient` (
   `id_patient` int(11) NOT NULL AUTO_INCREMENT,
-  `surname` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `surname` varchar(50) NOT NULL,
   `date_of_birth` date NOT NULL,
   `phone` varchar(16) NOT NULL,
   PRIMARY KEY (`id_patient`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `patient`
+--
+
+INSERT INTO `patient` (`id_patient`, `name`, `surname`, `date_of_birth`, `phone`) VALUES
+(2, 'Denzel', 'Washington', '1954-12-28', '039-499-1604'),
+(3, 'Leonardo', 'DiCaprio', '1974-11-11', '082-270-6766'),
+(4, 'Julia', 'Stiles', '1981-05-28', '085-698-4968'),
+(5, 'Tom', 'Hanks', '1956-07-09', '047-688-2690'),
+(6, 'Halle', 'Berry', '1966-08-14', '040-801-0454'),
+(7, 'Dwayne', 'Johnson', '1975-05-02', '022-304-7031'),
+(8, 'Morgan', 'Freeman', '1937-06-01', '036-163-4367');
 
 -- --------------------------------------------------------
 
@@ -152,9 +196,19 @@ CREATE TABLE IF NOT EXISTS `pharmacy` (
   `id_pharmacy` int(11) NOT NULL AUTO_INCREMENT,
   `pharm_title` varchar(50) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `extra` double NOT NULL,
   PRIMARY KEY (`id_pharmacy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `pharmacy`
+--
+
+INSERT INTO `pharmacy` (`id_pharmacy`, `pharm_title`, `address`) VALUES
+(8, 'Green apteka', 'Zelena, 12 str.'),
+(9, 'Znahar', 'Levandivka, 12 str.'),
+(10, 'АНЦ', 'проспект Бажана, 36'),
+(11, 'Соціальна Аптека', 'вул. Цвєтаєвої, 32'),
+(12, 'АНЦ', 'вул. Гришко, 6');
 
 -- --------------------------------------------------------
 
@@ -246,21 +300,21 @@ CREATE TABLE IF NOT EXISTS `purch_medicine` (
 --
 
 --
--- Обмеження зовнішнього ключа таблиці `balance` ('Сальдо')
+-- Обмеження зовнішнього ключа таблиці `balance`
 --
 ALTER TABLE `balance`
   ADD CONSTRAINT `balance_ibfk_1` FOREIGN KEY (`id_cash_flow`) REFERENCES `cash_flow` (`id_cash_flow`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`id_pharmacy`) REFERENCES `pharmacy` (`id_pharmacy`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Обмеження зовнішнього ключа таблиці `cash_flow` ('Рух коштів')
+-- Обмеження зовнішнього ключа таблиці `cash_flow`
 --
 ALTER TABLE `cash_flow`
   ADD CONSTRAINT `cash_flow_ibfk_1` FOREIGN KEY (`id_delivery`) REFERENCES `delivery` (`id_delivery`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `cash_flow_ibfk_2` FOREIGN KEY (`id_purch`) REFERENCES `purchase` (`id_purch`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Обмеження зовнішнього ключа таблиці `delivery` ('Поставка')
+-- Обмеження зовнішнього ключа таблиці `delivery`
 --
 ALTER TABLE `delivery`
   ADD CONSTRAINT `delivery_ibfk_1` FOREIGN KEY (`id_pharmacy`) REFERENCES `pharmacy` (`id_pharmacy`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -280,7 +334,7 @@ ALTER TABLE `pharmacy_medicine`
   ADD CONSTRAINT `pharmacy_medicine_ibfk_2` FOREIGN KEY (`id_medicine`) REFERENCES `medicine` (`id_medicine`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Обмеження зовнішнього ключа таблиці `prescription` ('Рецепт')
+-- Обмеження зовнішнього ключа таблиці `prescription`
 --
 ALTER TABLE `prescription`
   ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`id_doctor`) REFERENCES `doctor` (`id_doctor`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -294,7 +348,7 @@ ALTER TABLE `prescr_medicine`
   ADD CONSTRAINT `prescr_medicine_ibfk_2` FOREIGN KEY (`id_medicine`) REFERENCES `medicine` (`id_medicine`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Обмеження зовнішнього ключа таблиці `purchase` ('Покупка')
+-- Обмеження зовнішнього ключа таблиці `purchase`
 --
 ALTER TABLE `purchase`
   ADD CONSTRAINT `purchase_ibfk_1` FOREIGN KEY (`id_prescr`) REFERENCES `prescription` (`id_prescr`) ON DELETE NO ACTION ON UPDATE CASCADE,
