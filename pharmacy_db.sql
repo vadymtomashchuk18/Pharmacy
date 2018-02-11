@@ -79,6 +79,17 @@ CREATE TABLE IF NOT EXISTS `delivery` (
   KEY `id_pharmacy` (`id_pharmacy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп даних таблиці `delivery`
+--
+
+INSERT INTO `delivery` (`id_delivery`, `date`, `id_pharmacy`) VALUES 
+(1, '2018-02-01', 8),
+(2, '2018-02-01', 9),
+(3, '2018-02-04', 10),
+(4, '2018-02-05', 11),
+(5, '2018-02-07', 12);
+
 -- --------------------------------------------------------
 
 --
@@ -93,6 +104,22 @@ CREATE TABLE IF NOT EXISTS `delivery_medicine` (
   KEY `id_medicine` (`id_medicine`),
   KEY `id_delivery` (`id_delivery`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `delivery_medicine`
+--
+
+INSERT INTO `delivery_medicine` (`id_delivery`, `id_medicine`, `box_quantity`) VALUES 
+(1, 2, '40'),
+(1, 3, '60'),
+(1, 4, '30'),
+(1, 5, '80'),
+(2, 6, '100'),
+(2, 13, '75'),
+(3, 3, '200'),
+(3, 5, '160'),
+(4, 8, '200'),
+(5, 12, '130');
 
 -- --------------------------------------------------------
 
@@ -118,7 +145,9 @@ INSERT INTO `doctor` (`id_doctor`, `surname`, `name`, `speciality`, `years_of_pr
 (2, 'М\'ясоєдов', 'Андрій', 'Хірург', 3),
 (3, 'Глазнюк', 'Сергій', 'Офтальмолог', 7),
 (4, 'Зубнюк', 'Дарина', 'Стоматолог', 18),
-(5, 'Селівестрова', 'Катерина', 'Терапевт', 4);
+(5, 'Селівестрова', 'Катерина', 'Терапевт', 4),
+(6, 'Дорошенко', 'Марія', 'Терапевт', 7),
+(7, 'Гончар', 'Анатолій', 'Гастроентеролог', 17);
 
 -- --------------------------------------------------------
 
@@ -228,6 +257,15 @@ CREATE TABLE IF NOT EXISTS `pharmacy_medicine` (
   KEY `id_medicine` (`id_medicine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп даних таблиці `pharmacy_medicine`
+--
+
+INSERT INTO `pharmacy_medicine` (`id_pharmacy`, `id_medicine`, `pack_price`, `date_of_change`, `pack_quantity`) VALUES 
+(8, 2, '16.80', '2018-01-01', '10'),
+(8, 4, '20.00', '2018-01-20', '10'),
+(9, 6, '120.00', '2018-01-21', '5');
+
 -- --------------------------------------------------------
 
 --
@@ -245,6 +283,23 @@ CREATE TABLE IF NOT EXISTS `prescription` (
   KEY `id_patient` (`id_patient`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп даних таблиці `prescription`
+--
+
+INSERT INTO `prescription` (`id_prescr`, `date`, `id_doctor`, `id_patient`) VALUES
+(1, '2018-02-01', 2, 7),
+(2, '2018-02-03', 3, 5),
+(3, '2018-01-03', 4, 6),
+(4, '2017-12-30', 5, 5),
+(5, '2018-01-09', 3, 2),
+(6, '2018-01-09', 7, 4),
+(7, '2018-01-10', 6, 3),
+(8, '2018-01-04', 3, 8),
+(9, '2018-02-01', 4, 7),
+(10, '2018-02-09', 2, 2),
+(11, '2018-02-10', 5, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -261,6 +316,21 @@ CREATE TABLE IF NOT EXISTS `prescr_medicine` (
   KEY `id_medicine` (`id_medicine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп даних таблиці `prescr_medicine`
+--
+
+INSERT INTO `prescr_medicine` (`id_prescr`, `id_medicine`, `pack_quantity`, `pack_bought`) VALUES
+(1, 13, 3, 1),
+(1, 4, 2, 0),
+(1, 10, 7, NULL),
+(3, 8, 2, 2),
+(3, 11, 2, 0),
+(9, 6, 4, 1),
+(10, 7, 1, 1),
+(10, 11, 2, 2),
+(11, 9, 1, 1),
+(11, 14, 1, 1);
 -- --------------------------------------------------------
 
 --
@@ -280,6 +350,15 @@ CREATE TABLE IF NOT EXISTS `purchase` (
   KEY `id_patient` (`id_patient`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп даних таблиці `purchase`
+--
+
+INSERT INTO `purchase` (`id_purch`, `date`, `id_prescr`, `id_pharmacy`, `id_patient`) VALUES 
+(1, '2018-02-09', 10, 11, 2),
+(2, '2018-02-10', 11, 12, 4),
+(3, '2018-02-11', 10, 9, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -294,6 +373,18 @@ CREATE TABLE IF NOT EXISTS `purch_medicine` (
   KEY `id_purch` (`id_purch`),
   KEY `id_medicine` (`id_medicine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп даних таблиці `purch_medicine`
+--
+
+INSERT INTO `purch_medicine` (`id_purch`, `id_medicine`, `pack_quantity`) VALUES 
+(1, 7, 1),
+(1, 11, 1),
+(2, 9, 2),
+(3, 14, 1);
+
+-- ----------------------------------------------------------
 
 --
 -- Обмеження зовнішнього ключа збережених таблиць
