@@ -1,4 +1,5 @@
-package com.pharmacy.startup;
+package com.pharmacy;
+
 
 public class Startup {
 
