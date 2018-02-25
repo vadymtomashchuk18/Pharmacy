@@ -68,9 +68,8 @@ public class TestMainFrame extends JFrame {
                     }
                     
                 };
-                new TableDataViewWindow<>(Delivery.class, Arrays.asList(new Delivery[]{
-                           new Delivery(1, 1, Date.valueOf(LocalDate.now()), null) 
-                }), selectionHandler).setVisible(true);;
+                List<Delivery> delivery = PharmacyDataContext.getInstance().getDeliveries();
+                new TableDataViewWindow<>(Delivery.class, delivery, selectionHandler).setVisible(true);;
             }
         });
         

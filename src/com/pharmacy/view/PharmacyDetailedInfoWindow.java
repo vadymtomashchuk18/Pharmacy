@@ -2,9 +2,8 @@ package com.pharmacy.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -19,7 +18,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.pharmacy.data.PharmacyDataContext;
 import com.pharmacy.entities.*;
-import javax.swing.SwingConstants;
+import com.pharmacy.view.elements.CustomTableModel;
+import com.pharmacy.view.elements.CustomTableModel.TableSelectionEventHandler;
 
 public class PharmacyDetailedInfoWindow extends JFrame {
 
@@ -60,6 +60,8 @@ public class PharmacyDetailedInfoWindow extends JFrame {
         txtAddress.setText(pharmacy.getAddress());
         
         JButton btnOpenDrugList = new JButton("Show drugs");
+        
+        btnOpenDrugList.setEnabled(false);
        
         JButton btnClose = new JButton("\u0417\u0430\u043A\u0440\u0438\u0442\u0438");
         btnClose.addActionListener(new ActionListener() {
@@ -91,11 +93,18 @@ public class PharmacyDetailedInfoWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new TableDataViewWindow<>(Purchase.class, Arrays.asList(new Purchase[]{
-						new Purchase(1,Date.valueOf(LocalDate.now()), 2, 1, 1),
-						new Purchase(2,Date.valueOf(LocalDate.now()), 2, 1, 1),
-						new Purchase(3,Date.valueOf(LocalDate.now()), 2, 1, 1),
-				}), null).setVisible(true);
+				CustomTableModel.TableSelectionEventHandler<Purchase> selectionHandler = new TableSelectionEventHandler<Purchase>() {
+
+                    @Override
+                    public void handle(Purchase object, int row) {
+                    	List<PurchaseRecord> purchaseRecordList = PharmacyDataContext.getInstance().getPurchaseRecords(object.getId());
+                    	new TableDataViewWindow<>(PurchaseRecord.class, purchaseRecordList, null).setVisible(true);
+                    }
+                    
+                };
+				
+				List<Purchase> purchaseList = PharmacyDataContext.getInstance().getPurchaseHistory(pharmacy.getId());
+				new TableDataViewWindow<>(Purchase.class, purchaseList, selectionHandler).setVisible(true);
 			}
 		});
         

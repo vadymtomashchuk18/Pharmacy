@@ -7,11 +7,13 @@ public class DeliveryRecord {
 	private int deliveryId;
 	private int medcineId;
 	private int quantity;
+	private String medcineName; 
 	
-	public DeliveryRecord(int deliveryId, int medcineId, int quantity){
+	public DeliveryRecord(int deliveryId, int medcineId, String medcineName, int quantity){
 		this.deliveryId = deliveryId;
 		this.medcineId = medcineId;
 		this.quantity = quantity;
+		this.setMedcineName(medcineName);
 	}
 	
 	public int getDeliveryId() {
@@ -26,8 +28,16 @@ public class DeliveryRecord {
 		this.quantity = quantity;
 	}
 
-	@TableColumn(name="Medcine")
 	public int getMedcineId() {
 		return medcineId;
+	}
+	
+	@TableColumn(name="Medcine")
+	public String getMedcineName() {
+		return medcineName;
+	}
+
+	public void setMedcineName(String medcineName) {
+		this.medcineName = medcineName;
 	} 
 }

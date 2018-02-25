@@ -2,14 +2,14 @@ package com.pharmacy.entities;
 
 import com.pharmacy.annotations.TableColumn;
 
-public class Medcine {
+public class Medicine {
 	private int id;
 	private String title;
 	private String producer;
 	private double boxPrice;
 	private double quantityPerBox;
 	
-	public Medcine(int id, String title, String producer, double boxPrice, double quantityPerBox){
+	public Medicine(int id, String title, String producer, double boxPrice, double quantityPerBox){
 		this.id = id;
 		this.title = title;
 		this.producer = producer;
@@ -17,7 +17,7 @@ public class Medcine {
 		this.quantityPerBox = quantityPerBox;
 	}
 	
-	public Medcine setTitle(String newTitle){
+	public Medicine setTitle(String newTitle){
 		title = newTitle;
 		return this;
 	}	
@@ -32,7 +32,7 @@ public class Medcine {
 		return producer;
 	}
 	
-	public Medcine setProducer(String newProducer){
+	public Medicine setProducer(String newProducer){
 		producer = newProducer;
 		return this;
 	}
@@ -42,7 +42,7 @@ public class Medcine {
 		return boxPrice;
 	}
 	
-	public Medcine setBoxPrice(double newBoxPrice){
+	public Medicine setBoxPrice(double newBoxPrice){
 		boxPrice = newBoxPrice;
 		return this;
 	}
@@ -52,7 +52,7 @@ public class Medcine {
 		return quantityPerBox;
 	}
 	
-	public Medcine setQuantityPerBox(double newQuantityPerBox){
+	public Medicine setQuantityPerBox(double newQuantityPerBox){
 		quantityPerBox = newQuantityPerBox;
 		return this;
 	}

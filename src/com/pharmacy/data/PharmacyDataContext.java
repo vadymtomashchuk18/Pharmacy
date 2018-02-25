@@ -10,7 +10,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.pharmacy.entities.Delivery;
+import com.pharmacy.entities.DeliveryRecord;
+import com.pharmacy.entities.Medicine;
 import com.pharmacy.entities.Pharmacy;
+import com.pharmacy.entities.Purchase;
+import com.pharmacy.entities.PurchaseRecord;
 
 public class PharmacyDataContext extends DataContext {
 	
@@ -102,54 +107,109 @@ public class PharmacyDataContext extends DataContext {
 		}
         return true;
 	}
-
 	
-	
-	 public static void JDBCexample(String db, String user, String passwd) {
-	    	try {
-	           Class.forName("com.mysql.jdbc.Driver"); 	
-	     	   Connection c = DriverManager
-	                 .getConnection("jdbc:mysql://localhost/"+db+"?useSSL=false",user,passwd);       
-	           Statement st = c.createStatement();
-	           
-	           // create a table
-	           String tableName = "myTable" + String.valueOf((int)(Math.random() * 1000.0));
-	           String createTable = "CREATE TABLE " + tableName + " (id Integer, name Text(32))";
-	           st.execute(createTable); 
-	           System.out.println("Create Table " + tableName);
-	           
-	           System.out.println("Adding Table " );
-	           // enter value into table
-	           for(int i=0; i<25; i++) {
-	             String addRow = "INSERT INTO " + tableName + " VALUES ( " + 
-	                       String.valueOf((int) (Math.random() * 100000)) + ", 'Text Value " + 
-	                       String.valueOf(Math.random()) + "')";  	  
-	             st.execute(addRow);
-	             System.out.println("...." + addRow );
-	           }
-	           
-	           // Fetch table
-	           String selTable = "SELECT * FROM " + tableName;
+	public List<Delivery> getDeliveries(){
+		Connection conn = getConnection();
+		List<Delivery> deliveries = new ArrayList<Delivery>();
+        
+		try {
+			Statement st = conn.createStatement();
+			String selTable = "SELECT pharmacy.id_pharmacy, id_delivery, date, pharm_title FROM  delivery INNER JOIN pharmacy ON delivery.id_pharmacy=pharmacy.id_pharmacy";
 	           st.execute(selTable);
 	           ResultSet rs = st.getResultSet();
-	           while(rs.next()) {
-	             System.out.println(rs.getInt(1) + " : " + rs.getString(2));
+	           while(rs.next()){
+		        	  int id = rs.getInt("id_delivery");
+		        	  Date date = rs.getDate("date");
+		        	  int pharmacyId = rs.getInt("id_pharmacy");
+		        	  String pharmacyName = rs.getString("pharm_title");
+		        	  List<DeliveryRecord> deliveryRecords = getDeliveryRecords(id);
+		        	  deliveries.add(new Delivery(id, pharmacyId, pharmacyName, date, deliveryRecords));
 	           }
-	           
-	           // drop the table
-	           String dropTable = "DROP TABLE " + tableName;
-	           st.execute(dropTable);
-	           System.out.println("Drop Table " + tableName);
-	           
-	           // close and cleanup
-	           st.close();
-	           c.close();	
-	         }
-	         catch(Exception sqle){
-	             System.out.println("Exception: " + sqle.getMessage());
-	         }
-	    }
+	       st.close();
+	    } 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return deliveries; 
+	}
 	
-	
+	public List<Purchase> getPurchaseHistory(int pharmacyId){
+		Connection conn = getConnection();
+		List<Purchase> purchaseList = new ArrayList<Purchase>();
+        
+		try {
+			Statement st = conn.createStatement();
+			String selTable = "SELECT id_purch as id, date, name, surname FROM  purchase "
+					+ "INNER JOIN patient ON purchase.id_patient=patient.id_patient "
+					+ "WHERE (id_pharmacy=" + pharmacyId + ")";
+	           st.execute(selTable);
+	           ResultSet rs = st.getResultSet();
+	           while(rs.next()){
+		        	  int id = rs.getInt("id");
+		        	  Date date = rs.getDate("date");
+		        	  String patient = rs.getString("name") + " " + rs.getString("surname");
+		        	  List<PurchaseRecord> records = getPurchaseRecords(id);
+		        	  purchaseList.add(new Purchase(id, date,pharmacyId,0,patient,records));
+	           }
+	       st.close();
+	    } 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return purchaseList;
+	}
 
+	public List<PurchaseRecord> getPurchaseRecords(int purchaseId) {
+		Connection conn = getConnection();
+		List<PurchaseRecord> purchaseRecords = new ArrayList<PurchaseRecord>();
+        
+		try {
+			Statement st = conn.createStatement();
+			String selTable = "SELECT medicine.id_medicine, medicine.title, pack_quantity FROM  purch_medicine "
+					+ "INNER JOIN medicine ON purch_medicine.id_medicine=medicine.id_medicine "
+					+ "WHERE (id_purch=" + purchaseId + ")";
+	           st.execute(selTable);
+	           ResultSet rs = st.getResultSet();
+	           while(rs.next()){
+		        	  int medicineId = rs.getInt("id_medicine");
+		        	  int quantity = rs.getInt("pack_quantity");
+		        	  String title = rs.getString("title");
+		        	  purchaseRecords.add(new PurchaseRecord(purchaseId, quantity, new Medicine(medicineId,title,"",0,0)));
+	           }
+	       st.close();
+	    } 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return purchaseRecords;
+	}
+
+	public List<DeliveryRecord> getDeliveryRecords(int deliveryId){
+		Connection conn = getConnection();
+		List<DeliveryRecord> deliveries = new ArrayList<DeliveryRecord>();
+        
+		try {
+			Statement st = conn.createStatement();
+			String selTable = "SELECT medicine.id_medicine, box_quantity, title FROM  delivery_medicine "
+					+ "INNER JOIN medicine ON delivery_medicine.id_medicine=medicine.id_medicine "
+					+ "WHERE (id_delivery=" + deliveryId + ")";
+	           st.execute(selTable);
+	           ResultSet rs = st.getResultSet();
+	           while(rs.next()){
+		        	  int medicineId = rs.getInt("id_medicine");
+		        	  int quantity = rs.getInt("box_quantity");
+		        	  String medicineName = rs.getString("title");
+		        	  deliveries.add(new DeliveryRecord(deliveryId, medicineId, medicineName, quantity));
+	           }
+	       st.close();
+	    } 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return deliveries;
+	}
 }

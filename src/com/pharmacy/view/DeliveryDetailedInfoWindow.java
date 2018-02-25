@@ -23,41 +23,39 @@ public class DeliveryDetailedInfoWindow extends JFrame {
     private JTextField txtPublicationName;
     private JTextField txtPublicationIdentity;
     private JTextField txtReaderName;
-    private JTextField txtFrom;
-    private JTextField txtTo;
     
     /**
      * Create the frame.
      */
     public DeliveryDetailedInfoWindow(Delivery object) {
         setResizable(false);
-        setTitle("\u0406\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F \u043F\u0440\u043E \u0432\u0438\u0434\u0430\u0447\u0443");
+        setTitle("Delivery Info");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 299, 221);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         
-        JLabel lblPublication = new JLabel("Date");
+        JLabel lblDate = new JLabel("Date");
         
         txtPublicationName = new JTextField();
         txtPublicationName.setEditable(false);
         txtPublicationName.setColumns(10);
         txtPublicationName.setText(object.getDate().toLocaleString());
         
-        JLabel lblIdentity = new JLabel("Pharmacy id");
+        JLabel lblIdentity = new JLabel("Delivery Id");
         
         txtPublicationIdentity = new JTextField();
         txtPublicationIdentity.setEditable(false);
         txtPublicationIdentity.setColumns(10);
-        txtPublicationIdentity.setText(object.getPharmacy_id() + "");
+        txtPublicationIdentity.setText(object.getId() +"");
         
-        JLabel lblReader = new JLabel("Delivery's Id");
+        JLabel lblReader = new JLabel("Pharmacy");
         
         txtReaderName = new JTextField();
         txtReaderName.setEditable(false);
         txtReaderName.setColumns(10);
-        txtReaderName.setText(object.getId() +"");
+        txtReaderName.setText(object.getPharmacy().getTitle());
         
         
         JButton btnReturn = new JButton("Delivery records");
@@ -66,11 +64,7 @@ public class DeliveryDetailedInfoWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				new TableDataViewWindow<>(DeliveryRecord.class, Arrays.asList(new DeliveryRecord[]{
-						new DeliveryRecord(1, 1, 2),
-						new DeliveryRecord(1, 2, 20),
-						new DeliveryRecord(1, 3, 30),
-				}), null).setVisible(true);
+				new TableDataViewWindow<>(DeliveryRecord.class, object.getDeliveryRecords(), null).setVisible(true);
 			}
 		});
         btnReturn.setEnabled(true);
@@ -97,7 +91,7 @@ public class DeliveryDetailedInfoWindow extends JFrame {
                             .addComponent(txtReaderName)
                             .addGroup(gl_contentPane.createSequentialGroup()
                                 .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                    .addComponent(lblPublication)
+                                    .addComponent(lblDate)
                                     .addComponent(txtPublicationName, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(ComponentPlacement.RELATED)
                                 .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -113,7 +107,7 @@ public class DeliveryDetailedInfoWindow extends JFrame {
             gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
                     .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(lblPublication)
+                        .addComponent(lblDate)
                         .addComponent(lblIdentity))
                     .addPreferredGap(ComponentPlacement.RELATED)
                     .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
