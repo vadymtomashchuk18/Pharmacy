@@ -1,0 +1,99 @@
+Опис індивідуального проекту "Пацієнт"
+
+.config
+	Клас DBconfig
+		- абстрактний клас налаштування доступу до БД
+		- методи:
+			- конструктор DBconfig(), в якому відбувається налаштування звязку з БД
+			- getConnection() - повертає налаштування до БД, що ініціалізуються в конструкторі
+
+.entities: 
+	Клас Patient
+	- клас-об'єкт сутності пацієнт
+	- методи:
+		+ конструктори
+		+ методи getters - методи для отримання значень полів касу
+		+ методи setters - методи для передавання (внесення) значень полів класу
+		+ toString - представлення об'єкту за допомогою String
+
+	Клас Prescription
+		- клас-об'єкт сутності рецепт
+		- методи:
+			+ конструктори
+			+ методи getters - методи для отримання значень полів касу
+			+ методи setters - методи для передавання (внесення) значень полів класу
+			+ toString - представлення об'єкту за допомогою String
+
+	Клас Purchase
+		- клас-об'єкт сутності рецепт
+		- методи:
+			+ конструктори
+			+ методи getters - методи для отримання значень полів касу
+			+ методи setters - методи для передавання (внесення) значень полів класу
+			+ toString - представлення об'єкту за допомогою String
+
+.data
+	Клас PatientData
+		- клас DAO (data access object) для Patient, розширює клас DBconfig
+		- методи:
+			+ getInstance() - дістає екземпляр класу PatientData 
+			+ getAllPatient() - дістає List всіх пацієнтів та відомостей про них з бази даних
+			+ addPatient(Patient item) - додає нового пацієнта до бази даних
+			+ getPatientByID() - діставання інформації про конкретного пацієнта  за його id
+
+	Клас PrescrData
+		- клас DAO (data access object) для Prescription, розширює клас DBconfig
+		- методи:
+			+ getInstance() - дістає екземпляр класу PrescrData 
+			+ getAllPrescr() - дістає List всіх рецептів та відомостей про них з бази даних
+
+	Клас PurchaseData
+		- клас DAO (data access object) для Purchase, розширює клас DBconfig
+		- методи:
+			+ getInstance() - дістає екземпляр класу PurchaseData 
+			+ getAllPurchases() - дістає List всіх покупок та відомостей про них з бази даних
+			+ addPurchase(Purchase item) - додає нову покупку до бази даних
+
+.annotations
+дані класи використовуються для спрощення представлення таблиці з даними про сутності (entities)
+	 Клас Tableable
+	 	- інтерфейс для анотації @Tableable, містить назву таблиці 
+
+	 Клас TableColumn
+	 	- інтерфейс для анотації @TableColumn, містить назву колонки та її порядковий номер при виводі
+
+.views.elements
+	Клас CustomTableModel
+		- допоміжний клас , що розширює AbstractTableModel
+		- методи :
+			+ public int getRowCount(); //реалізація в AbstractTableModel
+ 			+ public int getColumnCount(); //реалізація в AbstractTableModel
+ 			+ public Object getValueAt(int row, int column); //реалізація в AbstractTableModel
+			+ getColumnName(int col);
+			+ getColumnClass(int c);
+			+ метод handle(EType object, int row) з інтерфейсу TableSelectionEventHandler<EType> для подальшої обробки даних при натисканні на рядок таблиці
+
+.views
+	Клас TableDataViewWindow
+		- клас для загального відображення таблиці на фреймі (використання в MainFrame)
+
+	Клас MainFrame
+		- клас для візуалізації головного мені системи Аптека
+
+	Клас PatientFrame
+		- клас для візуалізації таблиці пацієнтів та інформації про них
+
+	Клас PurchaseFrame
+		- клас для візуалізації таблиці покупок та інформації про них
+
+	Клас PrescriptionsFrame
+		- клас для візуалізації таблиці рецептів та інформації про них
+
+	Клас AddPatientFrame
+		- клас для візуалізації додавання пацієнта в БД
+
+	Клас AddPurchaseFrame
+		- клас для візуалізації додавання покупки а БД
+
+	Клас SearchPatient
+		- клас для візуалізації пошуку пацієнта в БД
