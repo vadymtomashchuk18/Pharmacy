@@ -112,7 +112,7 @@ public class SearchPatient extends JFrame {
 
                     @Override
                     public void handle(Patient object, int row) {
-                        new PatientFrame(object).setVisible(true);
+                        new CurrentPatientFrame(object).setVisible(true);
                     }
                     
                 };
@@ -247,7 +247,7 @@ public class SearchPatient extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Patient p = lstReadersResult.getSelectedValue();
-				new PatientFrame(p).setVisible(true);
+				new CurrentPatientFrame(p).setVisible(true);
 			}
 		});
         

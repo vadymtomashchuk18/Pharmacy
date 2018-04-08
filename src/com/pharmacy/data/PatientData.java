@@ -27,7 +27,7 @@ public class PatientData extends DBconfig {
 	
 	public List<Patient> getAllPatients() {
 		Connection conn = getConnection();
-		List<Patient> pharmacies = new ArrayList<Patient>();
+		List<Patient> patients = new ArrayList<Patient>();
         
 		try {
 			Statement st = conn.createStatement();
@@ -40,7 +40,7 @@ public class PatientData extends DBconfig {
 		        	  String surname = rs.getString("surname");
 		        	  Date dateOfBirth = rs.getDate("date_of_birth");
 		        	  String phone = rs.getString("phone");
-	        	  pharmacies.add(new Patient(id, name, surname, dateOfBirth, phone));
+	        	  patients.add(new Patient(id, name, surname, dateOfBirth, phone));
 	           }
 	       st.close();
 	    } 
@@ -48,7 +48,55 @@ public class PatientData extends DBconfig {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return pharmacies; 
+        return patients; 
+	}
+	
+	public List<Patient> getAllPatientsNames() {
+		Connection conn = getConnection();
+		List<Patient> patientsNames = new ArrayList<Patient>();
+        
+		try {
+			Statement st = conn.createStatement();
+			String selTable = "SELECT id, name, surname FROM  patient";
+	           st.execute(selTable);
+	           ResultSet rs = st.getResultSet();
+	           while(rs.next()){
+		        	  int id = rs.getInt("id_patient");
+		        	  String name = rs.getString("name");
+		        	  String surname = rs.getString("surname");
+	        	  patientsNames.add(new Patient(id, name, surname));
+	           }
+	       st.close();
+	    } 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return patientsNames; 
+	}
+	
+	public Patient getPatientById(int id_pat) {
+		Connection conn = getConnection();
+		Patient patient = new Patient();
+		try {
+			Statement st = conn.createStatement();
+			String sql = "SELECT * FROM Patient WHERE patientId=" + id_pat;
+				st.execute(sql);
+				ResultSet rs = st.getResultSet();
+				while (rs.next()) {
+					int id = rs.getInt("id_patient");
+		        	  String name = rs.getString("name");
+		        	  String surname = rs.getString("surname");
+		        	  Date dateOfBirth = rs.getDate("date_of_birth");
+		        	  String phone = rs.getString("phone");
+		        	  patient = new Patient (id, name, surname, dateOfBirth, phone);
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return patient;
 	}
 
 	public boolean addPatient(Patient item) {

@@ -94,7 +94,7 @@ public class PatientFrame extends JFrame {
 
                     @Override
                     public void handle(Patient object, int row) {
-                        new PatientFrame(object).setVisible(true);
+                        new CurrentPatientFrame(object).setVisible(true);
                     }
                     
                 };
@@ -181,10 +181,8 @@ public class PatientFrame extends JFrame {
   			@Override
             public void actionPerformed(ActionEvent e) {
   				dispose();
-                new AddPurchaseFrame(patientContext.getAllPatients()).setVisible(true);
-//                for(Patient p : patientContext.getAllPatients()){
-//                	System.out.println(p);
-//                }
+                new AddPurchaseFrame(patientContext.getAllPatientsNames()).setVisible(true);
+//              new PharmacySearchWindow(pharmacyContext.getAllPharmacies()).setVisible(true);
             }
   		});
   		add.add(addPurchase);
@@ -193,8 +191,5 @@ public class PatientFrame extends JFrame {
 
 	}
 	
-	public PatientFrame(Patient patient) {
-		setTitle("Current patient");
-	}
 
 }

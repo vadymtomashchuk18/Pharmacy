@@ -114,7 +114,7 @@ public class AddPurchaseFrame extends JFrame {
 
                     @Override
                     public void handle(Patient object, int row) {
-                        new PatientFrame(object).setVisible(true);
+                        new CurrentPatientFrame(object).setVisible(true);
                     }
                     
                 };
@@ -201,7 +201,7 @@ public class AddPurchaseFrame extends JFrame {
   			@Override
             public void actionPerformed(ActionEvent e) {
   				dispose();
-                new AddPurchaseFrame(patientContext.getAllPatients()).setVisible(true);
+                new AddPurchaseFrame(patientContext.getAllPatientsNames()).setVisible(true);
 //                for(Patient p : patientContext.getAllPatients()){
 //                	System.out.println(p);
 //                }
@@ -257,7 +257,7 @@ public class AddPurchaseFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Patient p = lstReadersResult.getSelectedValue();
-				new PatientFrame(p).setVisible(true);
+				new CurrentPatientFrame(p).setVisible(true);
 			}
 		});
         

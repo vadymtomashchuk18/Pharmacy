@@ -92,7 +92,7 @@ public class TableDataViewWindow<T> extends JFrame {
 
                         @Override
                         public void handle(Patient object, int row) {
-                            new PatientFrame(object).setVisible(true);
+                            new CurrentPatientFrame(object).setVisible(true);
                         }
                         
                     };

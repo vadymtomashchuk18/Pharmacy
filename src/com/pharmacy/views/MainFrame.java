@@ -32,9 +32,6 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private PatientData patientContext;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -105,7 +102,7 @@ public class MainFrame extends JFrame {
 
                     @Override
                     public void handle(Patient object, int row) {
-                        new PatientFrame(object).setVisible(true);
+                        new CurrentPatientFrame(object).setVisible(true);
                     }
                     
                 };

@@ -34,6 +34,13 @@ public class Patient {
 		this.phoneNumber = phone;
 	}
 
+	public Patient(int patientID, String firstName, String lastName) {
+		super();
+		this.patientID = patientID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 	@TableColumn(name = "Id", number = 1)
 	public int getPatientID() {
 		return patientID;
